@@ -53,6 +53,23 @@ h1 {
     transform: scale(0.9);
 }
 
+button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #ff6b81;
+    transform: scale(1.05);
+}
+
 @media (max-width: 480px) {
     h1 {
         font-size: 2rem;
