@@ -70,12 +70,12 @@ function updateTimer() {
 function displayResult() {
     announcement.innerHTML = `Skor akhir Anda: ${score}`;
     
-    if (score < 75) {
-        resultImage.src = 'kalah.jpg'; // Ganti dengan path gambar meledek
-    } else if (score >= 75 && score < 80) {
-        resultImage.src = 'biasa.jpg'; // Ganti dengan path gambar normal
+    if (score < 50) {
+        resultImage.src = 'kalah.png'; // Ganti dengan path gambar meledek
+    } else if (score >= 50 && score < 80) {
+        resultImage.src = 'biasa.png'; // Ganti dengan path gambar normal
     } else if (score >= 80 && score <= 85) {
-        resultImage.src = 'menang.jpg'; // Ganti dengan path gambar bagus
+        resultImage.src = 'menang.png'; // Ganti dengan path gambar bagus
     } else {
         resultImage.src = 'menang.jpg'; // Ganti dengan path gambar sangat bagus
     }
