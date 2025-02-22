@@ -1,119 +1,107 @@
-const target = document.getElementById('target');
-const timerDisplay = document.getElementById('timer');
-const scoreDisplay = document.getElementById('score');
-const startButton = document.getElementById('startButton');
-const resetButton = document.getElementById('resetButton');
-const announcement = document.getElementById('announcement');
-const resultImage = document.getElementById('resultImage');
-const scoreText = document.getElementById('scoreText');
-const gameContainer = document.querySelector('.game-container');
-
-let score = 0;
-let timeLeft = 30;
-let gameActive = false;
-let gameWidth = gameContainer.offsetWidth;
-let gameHeight = gameContainer.offsetHeight;
-
-// Update game area dimensions on resize
-window.addEventListener('resize', () => {
-    gameWidth = gameContainer.offsetWidth;
-    gameHeight = gameContainer.offsetHeight;
-});
-
-// Mobile touch support
-target.addEventListener('touchstart', handleClick, { passive: true });
-
-function moveTarget() {
-    if (!gameActive) return;
-    
-    const maxX = gameWidth - target.offsetWidth;
-    const maxY = gameHeight - target.offsetHeight;
-    
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * (maxY - 20)); // Mengurangi 20 untuk mengangkat target
-    target.style.left = `${randomX}px`;
-    target.style.top = `${randomY}px`;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-function handleClick(e) {
-    if (!gameActive) return;
-    
-    // Add click effect
-    const clickEffect = document.createElement('div');
-    clickEffect.classList.add('click-effect');
-    clickEffect.style.left = `${e.clientX || e.touches[0].clientX}px`;
-    clickEffect.style.top = `${e.clientY || e.touches[0].clientY}px`;
-    document.body.appendChild(clickEffect);
-    
-    // Remove effect after animation
-    setTimeout(() => {
-        clickEffect.remove();
-    }, 300);
-    
-    score++;
-    scoreDisplay.textContent = score;
-    moveTarget();
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-function updateTimer() {
-    if (!gameActive) return;
+.game-container {
+    text-align: center;
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.target {
+    width: 80px;
+    height: 80px;
+    background-image: url('WhatsApp Image 2025-02-21 at 11.20.22.jpeg');
+    background-size: cover;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.7);
+    transition: transform 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.target:active {
+    transform: scale(0.9);
+}
+
+button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #ff6b81;
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
     
-    timeLeft--;
-    timerDisplay.textContent = timeLeft;
+    .game-info {
+        font-size: 1rem;
+    }
     
-    if (timeLeft <= 0) {
-        gameActive = false;
-        displayResult();
+    .target {
+        width: 60px;
+        height: 60px;
     }
 }
 
-// Display result based on score
-function displayResult() {
-    announcement.innerHTML = `Skor akhir Anda: ${score}`;
-    scoreText.innerHTML = `Skor Anda: ${score}`; // Menampilkan skor di atas gambar
-    
-    if (score < 50) {
-        resultImage.src = 'kalah.png'; // Ganti dengan path gambar meledek
-    } else if (score >= 50 && score < 80) {
-        resultImage.src = 'biasa.png'; // Ganti dengan path gambar normal
-    } else if (score >= 80 && score <= 85) {
-        resultImage.src = 'menang.png'; // Ganti dengan path gambar bagus
-    } else {
-        resultImage.src = 'menang.png'; // Ganti dengan path gambar sangat bagus
+@keyframes clickEffect {
+    0% {
+        transform: scale(1);
+        opacity: 1;
     }
-    
-    resultImage.style.display = 'block'; // Tampilkan gambar hasil
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
 }
 
-// Initialize game
-function startGame() {
-    score = 0;
-    timeLeft = 30;
-    gameActive = true;
-    scoreDisplay.textContent = score;
-    timerDisplay.textContent = timeLeft;
-    moveTarget();
-    setInterval(updateTimer, 1000);
+.click-effect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    animation: clickEffect 0.3s ease-out;
+    pointer-events: none;
 }
-
-// Reset game
-function resetGame() {
-    score = 0;
-    timeLeft = 30;
-    gameActive = false;
-    scoreDisplay.textContent = score;
-    timerDisplay.textContent = timeLeft;
-    target.style.left = '0px';
-    target.style.top = '0px';
-    resultImage.style.display = 'none'; // Sembunyikan gambar hasil
-    announcement.innerHTML = ''; // Kosongkan pengumuman
-    scoreText.innerHTML = ''; // Kosongkan teks skor
-}
-
-// Event listeners for buttons
-startButton.addEventListener('click', startGame);
-resetButton.addEventListener('click', resetGame);
-
-// Start game when page loads
-window.addEventListener('load', resetGame);
-target.addEventListener('click', handleClick);
