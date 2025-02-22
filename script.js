@@ -3,6 +3,8 @@ const timerDisplay = document.getElementById('timer');
 const scoreDisplay = document.getElementById('score');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
+const announcement = document.getElementById('announcement');
+const resultImage = document.getElementById('resultImage');
 const gameContainer = document.querySelector('.game-container');
 
 let score = 0;
@@ -26,10 +28,8 @@ function moveTarget() {
     const maxX = gameWidth - target.offsetWidth;
     const maxY = gameHeight - target.offsetHeight;
     
-    // Generate random positions with more variability
     const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-    
+    const randomY = Math.floor(Math.random() * (maxY - 20)); // Mengurangi 20 untuk mengangkat target
     target.style.left = `${randomX}px`;
     target.style.top = `${randomY}px`;
 }
@@ -62,8 +62,25 @@ function updateTimer() {
     
     if (timeLeft <= 0) {
         gameActive = false;
-        alert(`Game Over! Skor akhir Anda: ${score}`);
+        displayResult();
     }
+}
+
+// Display result based on score
+function displayResult() {
+    announcement.innerHTML = `Skor akhir Anda: ${score}`;
+    
+    if (score < 75) {
+        resultImage.src = 'kalah.jpg'; // Ganti dengan path gambar meledek
+    } else if (score >= 75 && score < 80) {
+        resultImage.src = 'biasa.jpg'; // Ganti dengan path gambar normal
+    } else if (score >= 80 && score <= 85) {
+        resultImage.src = 'menang.jpg'; // Ganti dengan path gambar bagus
+    } else {
+        resultImage.src = 'menang.jpg'; // Ganti dengan path gambar sangat bagus
+    }
+    
+    resultImage.style.display = 'block'; // Tampilkan gambar hasil
 }
 
 // Initialize game
@@ -86,6 +103,8 @@ function resetGame() {
     timerDisplay.textContent = timeLeft;
     target.style.left = '0px';
     target.style.top = '0px';
+    resultImage.style.display = 'none'; // Sembunyikan gambar hasil
+    announcement.innerHTML = ''; // Kosongkan pengumuman
 }
 
 // Event listeners for buttons
