@@ -1,11 +1,13 @@
 const target = document.getElementById('target');
 const timerDisplay = document.getElementById('timer');
 const scoreDisplay = document.getElementById('score');
+const startButton = document.getElementById('startButton');
+const resetButton = document.getElementById('resetButton');
 const gameContainer = document.querySelector('.game-container');
 
 let score = 0;
 let timeLeft = 30;
-let gameActive = true;
+let gameActive = false;
 let gameWidth = gameContainer.offsetWidth;
 let gameHeight = gameContainer.offsetHeight;
 
@@ -24,6 +26,7 @@ function moveTarget() {
     const maxX = gameWidth - target.offsetWidth;
     const maxY = gameHeight - target.offsetHeight;
     
+    // Generate random positions with more variability
     const randomX = Math.floor(Math.random() * maxX);
     const randomY = Math.floor(Math.random() * maxY);
     
@@ -74,6 +77,21 @@ function startGame() {
     setInterval(updateTimer, 1000);
 }
 
+// Reset game
+function resetGame() {
+    score = 0;
+    timeLeft = 30;
+    gameActive = false;
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = timeLeft;
+    target.style.left = '0px';
+    target.style.top = '0px';
+}
+
+// Event listeners for buttons
+startButton.addEventListener('click', startGame);
+resetButton.addEventListener('click', resetGame);
+
 // Start game when page loads
-window.addEventListener('load', startGame);
+window.addEventListener('load', resetGame);
 target.addEventListener('click', handleClick);
